@@ -1,8 +1,8 @@
 import logging
+import argparse
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
 from keystoneclient.v3 import client
-import argparse
 
 ADMIN_NAME = 'admin'
 PROJECT_NAME = 'openstack'

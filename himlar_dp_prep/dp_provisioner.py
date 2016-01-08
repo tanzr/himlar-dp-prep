@@ -1,8 +1,8 @@
+import logging
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
 from keystoneclient.v3 import client
 import argparse
-import logging
 
 ADMIN_NAME = 'admin'
 DEFAULT_DOMAIN_NAME = 'default'
@@ -37,11 +37,11 @@ class DpProvisioner(object):
         groups = self.ks.groups.list(name=group_name(user_id), domain=self.domain)
         projs = self.ks.projects.list(name=proj_name(user_id), domain=self.domain)
         for p in projs:
-            res=self.ks.projects.delete(p.id)
-            log.info("deleted project {}".format(p.id))
+            self.ks.projects.delete(p.id)
+            log.info("deleted project %s", p.id)
         for g in groups:
-            res=self.ks.groups.delete(g.id)
-            log.info("deleted group {}".format(g.id))
+            self.ks.groups.delete(g.id)
+            log.info("deleted group %s", g.id)
 
 
     def is_provisioned(self, user_id):
@@ -52,17 +52,17 @@ class DpProvisioner(object):
             return any(['project' in r.scope for r in roles])
         else:
             return False
-    
+
     def grant_membership(self, proj, group):
-        member_roles=self.ks.roles.list(name=MEMBER_ROLE_NAME)
+        member_roles = self.ks.roles.list(name=MEMBER_ROLE_NAME)
         if len(member_roles) == 1:
             member_role = member_roles[0]
         else:
             raise ValueError('Expecting unique _member_ role')
-        res=self.ks.roles.grant(role=member_role, project=proj, group=group)
-        log.debug("res of granting role: {}".format(res))
-        log.debug("role assignments for {}: {}".format(
-            group.name, self.ks.role_assignments.list(group=group)))
+        res = self.ks.roles.grant(role=member_role, project=proj, group=group)
+        log.debug("res of granting role: %s", res)
+        log.debug("role assignments for %s: %s",
+                  group.name, self.ks.role_assignments.list(group=group))
 
     def provision(self, user_id):
         gname = group_name(user_id)
@@ -71,12 +71,12 @@ class DpProvisioner(object):
         projs = self.ks.projects.list(name=pname, domain=self.domain)
         if len(groups) < 1:
             group = self.ks.groups.create(name=gname, domain=self.domain)
-            log.info("group created: {}".format(group.id))
+            log.info("group created: %s", group.id)
         else:
             group = groups[0]
         if len(projs) < 1:
             proj = self.ks.projects.create(name=pname, domain=self.domain)
-            log.info("project created: {}".format(proj.id))
+            log.info("project created: %s", proj.id)
         else:
             proj = projs[0]
         self.grant_membership(proj, group)
@@ -84,16 +84,15 @@ class DpProvisioner(object):
 if __name__ == '__main__':
     DESCRIPTION = "Dataporten provisioner for Openstack"
 
-    auth_url = 'http://10.0.3.11:5000/v3'
-    email_jk = 'jon.kare.hellan@uninett.no'
-
+    AUTH_URL = 'http://10.0.3.11:5000/v3'
+    EMAIL_JK = 'jon.kare.hellan@uninett.no'
 
     def parse_args():
         parser = argparse.ArgumentParser(description=DESCRIPTION)
-        parser.add_argument('--id', default=email_jk,
+        parser.add_argument('--id', default=EMAIL_JK,
                             help="Identity to provision for")
         parser.add_argument('--pw', help='Password')
-        parser.add_argument('--url', default=auth_url, help="Keystone url")
+        parser.add_argument('--url', default=AUTH_URL, help="Keystone url")
         parser.add_argument('--delete', default=0, type=int,
                             help="Set to 1 to delete resources")
         parser.add_argument('--provision', default=1, type=int,

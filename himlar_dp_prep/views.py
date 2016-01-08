@@ -1,12 +1,12 @@
 import logging
-log = logging.getLogger(__name__)
-
 from pyramid.view import view_config
 from pyramid.response import Response
 from authomatic import Authomatic
 from authomatic.adapters import WebObAdapter
 from authomatic.providers import oauth2
 from .dp_provisioner import DpProvisioner
+
+log = logging.getLogger(__name__)
 
 class LoginFailedException(Exception):
     pass
@@ -17,11 +17,11 @@ class NoUserException(Exception):
 class NoEmailException(Exception):
     pass
 
-class ProvisionerClient:
+class ProvisionerClient(object):
     def __init__(self, request):
         self.request = request
         self.settings = request.registry.settings
-        
+
     def provision(self, user):
         keystone_url = self.settings.get('keystone_url', '')
         horizon_url = self.settings.get('horizon_url', '')

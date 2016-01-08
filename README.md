@@ -34,9 +34,10 @@ the [himlar-connect documentation](https://github.com/norcams/himlar-connect#to-
 ###  configuration
 
 All parameters are entered in the `app:main` section of the
-configuration file (`development.ini` or `production.ini`).
+configuration file (`development.ini` or `production.ini`). Copy
+`development.ini.example` to `development.ini` and add the parameters.
 
-The following are OpenStack settings. Values for the Vagrant based himlar-connect
+The following are OpenStack parameters. Values for the Vagrant based himlar-connect
 development environment are shown.
 
 <dl>
@@ -48,7 +49,7 @@ development environment are shown.
 <dd>Administrator password for OpenStack. E.g. <em>himlardev</em></dd>
 </dl>
 
-The following are settings from the client's page on the Dataporten
+The following are parameters from the client's page on the Dataporten
 dashboard, OAuth Details / OAuth Client credentials
 section:
 
@@ -60,6 +61,12 @@ section:
 </dl>
 
 ### Installation
+
+If the project was checked out from git, first make sure that the
+submodule with the theme is fetched:
+
+    git submodule init
+    git submodule update
 
 The app will typically be installed inside a virtualenv
 

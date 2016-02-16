@@ -5,9 +5,10 @@ from keystoneclient.v3 import client
 import argparse
 
 ADMIN_NAME = 'admin'
+PROJECT_NAME = 'openstack'
 DEFAULT_DOMAIN_NAME = 'default'
-DP_DOMAIN_NAME = 'connect'
-MEMBER_ROLE_NAME = '_member_'
+DP_DOMAIN_NAME = 'dataporten'
+MEMBER_ROLE_NAME = 'user'
 
 log = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class DpProvisioner(object):
                            username=ADMIN_NAME,
                            password=password,
                            user_domain_name=DEFAULT_DOMAIN_NAME,
-                           project_name=ADMIN_NAME,
+                           project_name=PROJECT_NAME,
                            project_domain_name=DEFAULT_DOMAIN_NAME)
         sess = session.Session(auth=auth)
         self.ks = client.Client(session=sess)

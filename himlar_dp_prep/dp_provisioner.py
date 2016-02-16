@@ -16,7 +16,7 @@ def group_name(user_id):
     return  '{}-group'.format(user_id)
 
 def proj_name(user_id):
-    return  '{}-proj'.format(user_id)
+    return  user_id.lower()
 
 class DpProvisioner(object):
     def __init__(self, url, password):

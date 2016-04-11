@@ -28,7 +28,7 @@ class DpProvisioner(object):
                            project_name=config['project_name'],
                            user_domain_name=config['user_domain_name'],
                            project_domain_name=config['project_domain_name'])
-        sess = session.Session(auth=auth)
+        sess = session.Session(auth=auth,verify='/opt/himlar/provision/ca/certs/ca-chain.cert.pem')
         self.ks = client.Client(session=sess)
         domains = self.ks.domains.list(name=dp_domain_name)
         if len(domains) == 1:

@@ -19,20 +19,22 @@ def proj_name(user_id):
     return  user_id.lower()
 
 class DpProvisioner(object):
-    def __init__(self, url, password):
-        auth = v3.Password(auth_url=url,
-                           username=ADMIN_NAME,
-                           password=password,
-                           user_domain_name=DEFAULT_DOMAIN_NAME,
-                           project_name=PROJECT_NAME,
-                           project_domain_name=DEFAULT_DOMAIN_NAME)
+    def __init__(self, config):
+        self.member_role_name = config['member_role_name']
+        dp_domain_name = config['dp_domain_name']
+        auth = v3.Password(auth_url=config['url'],
+                           username=config['username'],
+                           password=config['password'],
+                           project_name=config['project_name'],
+                           user_domain_name=config['user_domain_name'],
+                           project_domain_name=config['project_domain_name'])
         sess = session.Session(auth=auth)
         self.ks = client.Client(session=sess)
-        domains = self.ks.domains.list(name=DP_DOMAIN_NAME)
+        domains = self.ks.domains.list(name=dp_domain_name)
         if len(domains) == 1:
             self.domain = domains[0]
         else:
-            raise ValueError("Expecting unique '{}' domain".format(DP_DOMAIN_NAME))
+            raise ValueError("Expecting unique '{}' domain".format(dp_domain_name))
 
     def del_resources(self, user_id):
         groups = self.ks.groups.list(name=group_name(user_id), domain=self.domain)
@@ -55,7 +57,7 @@ class DpProvisioner(object):
             return False
 
     def grant_membership(self, proj, group):
-        member_roles = self.ks.roles.list(name=MEMBER_ROLE_NAME)
+        member_roles = self.ks.roles.list(name=self.member_role_name)
         if len(member_roles) == 1:
             member_role = member_roles[0]
         else:
@@ -100,9 +102,20 @@ if __name__ == '__main__':
                             help="Set to 1 to provision")
         return parser.parse_args()
 
+    def make_config(args):
+        return dict(url=args.url,
+                    password=args.pw,
+                    username=ADMIN_NAME,
+                    project_name=PROJECT_NAME,
+                    dp_domain_name=DP_DOMAIN_NAME,
+                    user_domain_name=DEFAULT_DOMAIN_NAME,
+                    project_domain_name=DEFAULT_DOMAIN_NAME,
+                    member_role_name=MEMBER_ROLE_NAME)
+
     args = parse_args()
+    config = make_config(args)
     logging.basicConfig(level=logging.INFO)
-    prov = DpProvisioner(args.url, args.pw)
+    prov = DpProvisioner(config)
     if args.delete:
         prov.del_resources(args.id)
     if args.provision:

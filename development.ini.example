@@ -17,7 +17,12 @@ pyramid.includes =
 # Openstack settings
 horizon_url = http://10.0.3.11
 keystone_url = http://10.0.3.11:5000/v3
-admin_pw = xxxxxxxx
+admin_user = admin
+admin_pw = xxxxxxx
+project_name = openstack
+dp_domain_name = dataporten
+default_domain_name = default
+member_role_name = user
 # Dataporten settings
 # Find them in Connect Dashboard/<this client>/OAuth details/OAuth Client credentials
 oauth_client_id = nnnnnnnn-nnnn-nnnn-nnnn-nnnnnnnnnnnn

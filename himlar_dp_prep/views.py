@@ -26,7 +26,20 @@ class ProvisionerClient(object):
         keystone_url = self.settings.get('keystone_url', '')
         horizon_url = self.settings.get('horizon_url', '')
         admin_pw = self.settings.get('admin_pw', '')
-        prov = DpProvisioner(keystone_url, admin_pw)
+        admin_user = self.settings.get('admin_user', '')
+        project_name = self.settings.get('project_name', '')
+        dp_domain_name = self.settings.get('dp_domain_name', '')
+        default_domain_name = self.settings.get('default_domain_name', '')
+        member_role_name = self.settings.get('member_role_name', '')
+        config = dict(url=keystone_url,
+                      password=admin_pw,
+                      username=admin_user,
+                      project_name=project_name,
+                      dp_domain_name=dp_domain_name,
+                      user_domain_name=default_domain_name,
+                      project_domain_name=default_domain_name,
+                      member_role_name=member_role_name)
+        prov = DpProvisioner(config)
         was_provisioned = prov.is_provisioned(user.email)
         if not was_provisioned:
             prov.provision(user.email)

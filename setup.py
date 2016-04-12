@@ -34,7 +34,7 @@ setup(name='himlar_dp_prep',
       packages=find_packages(),
       include_package_data=True,
       dependency_links = [
-          'http://github.com/jhellan/authomatic/tarball/master#egg=authomatic-0.1.0.uninett1'
+          'http://github.com/jhellan/authomatic/tarball/master#egg=authomatic-0.1.0.uninett2'
       ],
       zip_safe=False,
       install_requires=requires,

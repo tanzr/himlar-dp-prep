@@ -17,6 +17,7 @@ pyramid.includes =
 # Openstack settings
 horizon_url = http://10.0.3.11
 keystone_url = http://10.0.3.11:5000/v3
+keystone_cert = /opt/himlar/provision/ca/certs/ca-chain.cert.pem
 admin_user = admin
 admin_pw = xxxxxxx
 project_name = openstack

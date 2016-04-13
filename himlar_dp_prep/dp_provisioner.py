@@ -22,13 +22,14 @@ class DpProvisioner(object):
     def __init__(self, config):
         self.member_role_name = config['member_role_name']
         dp_domain_name = config['dp_domain_name']
+        keystone_cert=config.get('keystone_cert')
         auth = v3.Password(auth_url=config['url'],
                            username=config['username'],
                            password=config['password'],
                            project_name=config['project_name'],
                            user_domain_name=config['user_domain_name'],
                            project_domain_name=config['project_domain_name'])
-        sess = session.Session(auth=auth,verify='/opt/himlar/provision/ca/certs/ca-chain.cert.pem')
+        sess = session.Session(auth=auth,verify=keystone_cert)
         self.ks = client.Client(session=sess)
         domains = self.ks.domains.list(name=dp_domain_name)
         if len(domains) == 1:

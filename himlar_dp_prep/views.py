@@ -31,7 +31,7 @@ class ProvisionerClient(object):
         dp_domain_name = self.settings.get('dp_domain_name', '')
         default_domain_name = self.settings.get('default_domain_name', '')
         member_role_name = self.settings.get('member_role_name', '')
-        keystone_cert =  self.settings.get('keystone_cert', None)
+        keystone_cachain =  self.settings.get('keystone_cachain', None)
         config = dict(url=keystone_url,
                       password=admin_pw,
                       username=admin_user,
@@ -40,7 +40,7 @@ class ProvisionerClient(object):
                       user_domain_name=default_domain_name,
                       project_domain_name=default_domain_name,
                       member_role_name=member_role_name,
-                      keystone_cert=keystone_cert)
+                      keystone_cachain=keystone_cachain)
         prov = DpProvisioner(config)
         was_provisioned = prov.is_provisioned(user.email)
         if not was_provisioned:

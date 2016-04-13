@@ -15,7 +15,7 @@ pyramid.default_locale_name = en
 # Openstack settings
 horizon_url = http://10.0.3.11
 keystone_url = http://10.0.3.11:5000/v3
-keystone_cert = /opt/himlar/provision/ca/certs/ca-chain.cert.pem
+keystone_cachain = /opt/himlar/provision/ca/certs/ca-chain.cert.pem
 admin_user = admin
 admin_pw = xxxxxxxx
 project_name = openstack

@@ -45,9 +45,9 @@ class ProvisionerClient(object):
         was_provisioned = prov.is_provisioned(user.email)
         if not was_provisioned:
             prov.provision(user.email)
-        tpl = '{}/auth/OS-FEDERATION/websso/oidc?origin={}/dashboard/auth/websso/'
+        tpl = '{}/dashboard/auth/login/'
         return dict(user=user,
-                    dashboard_url=tpl.format(keystone_url, horizon_url),
+                    dashboard_url=tpl.format(horizon_url),
                     was_provisioned=was_provisioned)
 
     def login_complete(self, result):

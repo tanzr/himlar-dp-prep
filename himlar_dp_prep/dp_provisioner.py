@@ -97,6 +97,8 @@ if __name__ == '__main__':
                             help="Identity to provision for")
         parser.add_argument('--pw', help='Password')
         parser.add_argument('--url', default=AUTH_URL, help="Keystone url")
+        parser.add_argument('--project-name', default=PROJECT_NAME, help="Admin project name")
+        parser.add_argument('--dp-domain-name', default=DP_DOMAIN_NAME, help="Dataporten domain name")
         parser.add_argument('--delete', default=0, type=int,
                             help="Set to 1 to delete resources")
         parser.add_argument('--provision', default=1, type=int,
@@ -107,8 +109,8 @@ if __name__ == '__main__':
         return dict(url=args.url,
                     password=args.pw,
                     username=ADMIN_NAME,
-                    project_name=PROJECT_NAME,
-                    dp_domain_name=DP_DOMAIN_NAME,
+                    project_name=args.project_name,
+                    dp_domain_name=args.dp_domain_name,
                     user_domain_name=DEFAULT_DOMAIN_NAME,
                     project_domain_name=DEFAULT_DOMAIN_NAME,
                     member_role_name=MEMBER_ROLE_NAME)

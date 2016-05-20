@@ -15,6 +15,7 @@ requires = [
     'authomatic',
     'python-keystoneclient',
     'waitress',
+    'grampg',
     ]
 
 setup(name='himlar_dp_prep',

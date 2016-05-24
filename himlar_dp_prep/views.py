@@ -45,12 +45,15 @@ class ProvisionerClient(object):
                       with_local_user=with_local_user)
         prov = DpProvisioner(config)
         was_provisioned = prov.is_provisioned(user.email)
+        local_pw = None
         if not was_provisioned:
-            prov.provision(user.email)
+            prov_result = prov.provision(user.email)
         tpl = '{}/dashboard/auth/login/'
-        return dict(user=user,
+        res = dict(user=user,
                     dashboard_url=tpl.format(horizon_url),
                     was_provisioned=was_provisioned)
+        res.update(prov_result)
+        return res
 
     def login_complete(self, result):
         if result.error:

@@ -23,7 +23,8 @@ admin_pw = xxxxxxx
 project_name = openstack
 dp_domain_name = dataporten
 default_domain_name = default
-member_role_name = user
+member_role_name = _member_
+with_local_user = true
 # Dataporten settings
 # Find them in Connect Dashboard/<this client>/OAuth details/OAuth Client credentials
 oauth_client_id = nnnnnnnn-nnnn-nnnn-nnnn-nnnnnnnnnnnn

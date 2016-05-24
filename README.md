@@ -21,9 +21,9 @@ For testing and development, a client has already been registered with
 the following parameters: 
 <dl>
 <dt>Client ID<dt>
-<dd><em>ad604e3b-30cf-4b6a-9c4f-69483c316a02</em></dd>
+<dd><em>1375546d-7476-4ed7-a61a-92fd841f36a2</em></dd>
 <dt>Client Secret<dt>
-<dd><em>f2de303a-3e70-4141-b0ac-03207ae42e54</em></dd>
+<dd><em>a244b4c8-8e9a-40e6-858d-c4b66cd9454c</em></dd>
 <dt>Redirect URI<dt>
 <dd><em>http://localhost:6543/login</em></dd>
 </dl>
@@ -47,6 +47,19 @@ development environment are shown.
 <dd>URL for the OpenStack Keystone Identity Service, v3. E.g. <em>http://10.0.3.11:5000/v3</em></dd>
 <dt>admin_pw</dt>
 <dd>Administrator password for OpenStack. E.g. <em>himlardev</em></dd>
+<dt>project_name</dt>
+<dd>Name of project which creates resources. E.g.: admin</dd>
+<dt>dp_domain_name</dt>
+<dd>Name of domain resources will belong to. E.g.: connect</dd>
+<dt>default_domain_name</dt>
+<dd>Name of default domain. E.g.: default</dd>
+<dt>member_role_name</dt>
+<dd>Name of member role. E.g.: _member_</dd>
+<dt>with_local_user</dt>
+<dd>If 'true', a local user will be created in the same group, with
+the Dataporten email as username.</dd>
+<dt>keystone_cachain</dt>
+<dd>Certificate chain for keystone. Optional.</dd>
 </dl>
 
 The following are parameters from the client's page on the Dataporten

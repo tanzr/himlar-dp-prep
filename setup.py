@@ -9,6 +9,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
 requires = [
+    'funcsigs==1.0.0',
     'pyramid',
     'pyramid_mako',
     'pyramid_debugtoolbar',

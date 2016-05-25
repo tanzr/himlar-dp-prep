@@ -102,7 +102,7 @@ class DpProvisioner(object):
             user = self.ks.users.create(name=lname, domain=self.domain,
                                         project=proj, email=user_id, password=self.local_pw)
             log.info("local user created: %s", user.id)
-            self.grant_membership(dict(user=user, project=proj))
+            self.ks.users.add_to_group(user, group)
         return dict(local_user_name=lname,
                     local_pw=self.local_pw)
 

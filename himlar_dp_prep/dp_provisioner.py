@@ -72,13 +72,15 @@ class DpProvisioner(object):
         else:
             return False
 
-    def grant_membership(self, attrs):
+    def grant_membership(self, proj, group):
         member_roles = self.ks.roles.list(name=self.member_role_name)
         if len(member_roles) == 1:
             member_role = member_roles[0]
         else:
             raise ValueError("Expecting unique '{}' role".format(self.member_role_name))
-        res = self.ks.roles.grant(role=member_role, **attrs)
+        self.ks.roles.grant(role=member_role, project=proj, group=group)
+        log.debug("role assignments for %s: %s",
+                  group.name, self.ks.role_assignments.list(group=group))
 
     def provision(self, user_id):
         gname = group_name(user_id)
@@ -96,7 +98,7 @@ class DpProvisioner(object):
             log.info("project created: %s", proj.id)
         else:
             proj = projs[0]
-        self.grant_membership(dict(group=group, project=proj))
+        self.grant_membership(proj, group)
         if self.with_local_user:
             self.local_pw = make_password()
             user = self.ks.users.create(name=lname, domain=self.domain,

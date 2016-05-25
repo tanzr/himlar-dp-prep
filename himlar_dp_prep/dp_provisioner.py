@@ -9,7 +9,7 @@ ADMIN_NAME = 'admin'
 PROJECT_NAME = 'admin'
 DEFAULT_DOMAIN_NAME = 'default'
 DP_DOMAIN_NAME = 'dataporten'
-MEMBER_ROLE_NAME = 'user'
+MEMBER_ROLE_NAME = '_member_'
 
 log = logging.getLogger(__name__)
 

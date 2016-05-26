@@ -46,13 +46,13 @@ class ProvisionerClient(object):
         prov = DpProvisioner(config)
         was_provisioned = prov.is_provisioned(user.email)
         local_pw = None
-        if not was_provisioned:
-            prov_result = prov.provision(user.email)
         tpl = '{}/dashboard/auth/login/'
         res = dict(user=user,
                     dashboard_url=tpl.format(horizon_url),
                     was_provisioned=was_provisioned)
-        res.update(prov_result)
+        if not was_provisioned:
+            prov_result = prov.provision(user.email)
+            res.update(prov_result)
         return res
 
     def login_complete(self, result):
@@ -101,4 +101,3 @@ def no_user_view(exc, request):
 @view_config(context=NoEmailException, renderer="templates/noemail.mak")
 def no_email_view(exc, request):
     return {}
-

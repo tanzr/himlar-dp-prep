@@ -97,3 +97,34 @@ or
 
     pserve production.ini
 
+### Standalone use
+
+You can also access the functionality as a script. You can delete
+resources, provision resources, or both. Here is how to delete
+resources for a user:
+
+    python himlar_dp_prep/dp_provisioner.py --pw=topsecret \
+        --dp-domain-name=connect --id=donald@duck.com  \
+        --url=http://10.0.3.11:5000/v3 \
+        --delete=1 --provision=0
+
+Arguments:
+
+<dl>
+<dt>--id</dt>
+<dd>Identity to provision for. Typically email</dd>
+<dt>--pw</dt>
+<dd>Admin password</dd>
+<dt>--url</dt>
+<dd>Keystone url</dd>
+<dt>--project-name</dt>
+<dd>Admin project name</dd>
+<dt>--dp-domain-name</dt>
+<dd>Dataporten domain name</dd>
+<dt>--delete</dt>
+<dd>Set to 1 to delete resources</dd>
+<dt>--provision</dt>
+<dd>Set to 1 to provision resources</dd>
+<dt>--with-local-user</dt>
+<dd>Set to 1 to provision a local user for local access</dd>
+</dl>

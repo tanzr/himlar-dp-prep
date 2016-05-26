@@ -7,8 +7,10 @@
   <p>UH-IaaS klargjort for Dataporten</p>
 % endif
 % if local_pw:
-  <p>En lokal bruker for CLI-tilgang er lagt inn. Brukernavn er '${local_user_name}'
-  og passord er '${local_pw}'.</p>
+  <h3>API-tilgang</h3>
+  <p>Brukernavn er '${local_user_name}' og passord er '${local_pw}'.
+  <br/>
+  NB! Husk å skrive dette ned til senere bruk.</p>
 % endif
   <a href="${dashboard_url}" class="btn btn-default uninett-login-btn">
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>

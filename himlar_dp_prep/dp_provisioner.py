@@ -25,7 +25,7 @@ def local_user_name(user_id):
 def make_password():
     gen = PasswordGenerator()
     return (gen.of().some('numbers').some('lower_letters').some('upper_letters')
-            .length(10).done().generate())
+            .length(16).done().generate())
 
 class DpProvisioner(object):
     def __init__(self, config):

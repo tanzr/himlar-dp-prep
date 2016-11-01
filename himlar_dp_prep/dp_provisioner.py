@@ -41,7 +41,7 @@ class DpProvisioner(object):
                            user_domain_name=config['user_domain_name'],
                            project_domain_name=config['project_domain_name'])
         sess = session.Session(auth=auth,verify=keystone_cachain)
-        self.ks = client.Client(session=sess)
+        self.ks = client.Client(session=sess,region_name=config['region'])
         domains = self.ks.domains.list(name=dp_domain_name)
         if len(domains) == 1:
             self.domain = domains[0]

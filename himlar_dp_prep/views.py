@@ -25,6 +25,7 @@ class ProvisionerClient(object):
     def provision(self, user):
         keystone_url = self.settings.get('keystone_url', '')
         horizon_url = self.settings.get('horizon_url', '')
+        region = self.settings.get('region', '')
         admin_pw = self.settings.get('admin_pw', '')
         admin_user = self.settings.get('admin_user', '')
         project_name = self.settings.get('project_name', '')
@@ -36,6 +37,7 @@ class ProvisionerClient(object):
         config = dict(url=keystone_url,
                       password=admin_pw,
                       username=admin_user,
+                      region=region,
                       project_name=project_name,
                       dp_domain_name=dp_domain_name,
                       user_domain_name=default_domain_name,

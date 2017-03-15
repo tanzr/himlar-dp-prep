@@ -94,14 +94,14 @@ class DpProvisioner(object):
         else:
             group = groups[0]
         if len(projs) < 1:
-            proj = self.ks.projects.create(name=pname, domain=self.domain)
+            proj = self.ks.projects.create(name=pname, domain=self.domain, type='personal')
             log.info("project created: %s", proj.id)
         else:
             proj = projs[0]
         self.grant_membership(proj, group)
         if self.with_local_user:
             self.local_pw = make_password()
-            user = self.ks.users.create(name=lname, domain=self.domain,
+            user = self.ks.users.create(name=lname, domain=self.domain, type='api',
                                         project=proj, email=user_id, password=self.local_pw)
             log.info("local user created: %s", user.id)
             self.ks.users.add_to_group(user, group)

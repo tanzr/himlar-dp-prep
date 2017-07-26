@@ -52,7 +52,7 @@
                 <div class="footer-uninett">
                     <div class="footer-content-uninett">
                             <div class="footer-logo"> <img src="${request.static_url('himlar_dp_prep:uninett-theme/images/Uninett_pil_rod.svg')}" alt="Uninett logo" type="image/svg+xml"></div>
-                            <div class="footer-uninett-department">UNINETT AS 2016</div>
+                            <div class="footer-uninett-department">UNINETT AS 2017</div>
                     </div>
                     <div class="clearfix"></div>
                 </div>

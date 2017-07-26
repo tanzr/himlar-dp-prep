@@ -95,7 +95,7 @@ class DpProvisioner(object):
         else:
             group = groups[0]
         if len(projs) < 1:
-            proj = self.ks.projects.create(name=pname, domain=self.domain, type='demo')
+            proj = self.ks.projects.create(name=pname, domain=self.domain, type='demo', admin=lname)
             log.info("project created: %s", proj.id)
         else:
             proj = projs[0]

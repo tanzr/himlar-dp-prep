@@ -12,7 +12,7 @@ requires = [
     'funcsigs==1.0.0',
     'pyramid',
     'pyramid_mako',
-    'pyramid_debugtoolbar',
+#    'pyramid_debugtoolbar',
     'authomatic',
     'python-keystoneclient',
     'waitress',

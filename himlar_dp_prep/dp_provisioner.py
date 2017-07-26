@@ -40,8 +40,8 @@ class DpProvisioner(object):
                            project_name=config['project_name'],
                            user_domain_name=config['user_domain_name'],
                            project_domain_name=config['project_domain_name'])
-        sess = session.Session(auth=auth,verify=keystone_cachain)
-        self.ks = client.Client(session=sess,region_name=config['region'])
+        sess = session.Session(auth=auth, verify=keystone_cachain)
+        self.ks = client.Client(session=sess, region_name=config['region'])
         domains = self.ks.domains.list(name=dp_domain_name)
         if len(domains) == 1:
             self.domain = domains[0]
@@ -94,7 +94,7 @@ class DpProvisioner(object):
         else:
             group = groups[0]
         if len(projs) < 1:
-            proj = self.ks.projects.create(name=pname, domain=self.domain, type='personal')
+            proj = self.ks.projects.create(name=pname, domain=self.domain, type='demo')
             log.info("project created: %s", proj.id)
         else:
             proj = projs[0]

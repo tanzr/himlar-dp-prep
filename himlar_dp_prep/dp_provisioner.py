@@ -17,7 +17,7 @@ def group_name(user_id):
     return '{}-group'.format(user_id)
 
 def proj_name(user_id):
-    pname = user_id.lower().replace('@', '-')
+    pname = user_id.lower().replace('@', '.')
     return 'DEMO-%s' % pname
 
 def local_user_name(user_id):

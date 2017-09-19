@@ -2,9 +2,7 @@
 <div class="row uninett-color-white uninett-whole-row uninett-padded">
   <h2>UH-IaaS via Dataporten</h2>
   <p>To create your personal project in UH-Iaas, you should log in here via Dataporten.</p><br/>
-  <h3>Tjenestevilkår / Terms of service</h3>
-  <p>Vennligst les gjennom <a href="http://docs.uh-iaas.no/en/latest/terms-of-service.html" target="blank">
-  tjenestevilkår</a> før du tar i bruk tjenesten.</p>
+  <h3>Terms of service</h3>
   <p>Please read our <a href="http://docs.uh-iaas.no/en/latest/terms-of-service.html" target="blank">
   terms of service</a> before you start using the service.</p>
   <br/>

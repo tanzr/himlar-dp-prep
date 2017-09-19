@@ -3,7 +3,7 @@
   <h2>${header}</h2>
   <p>${message}</p>
 % if provisioned:
- <p>Fortsett til UH-IaaS <a href="${dashboard_url}">[her].</a></p>
- <p>Du blir muligens sendt innom Dataporten igjen først.</p>
+ <p>Continue to UH-IaaS <a href="${dashboard_url}">[her].</a></p>
+ <p>You may be sent back to Dataporten again.</p>
 % endif
 </div>

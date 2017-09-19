@@ -2,19 +2,21 @@
 <div class="row uninett-color-white uninett-whole-row uninett-padded">
   <h2>${user.name}</h2>
 % if was_provisioned:
-  <p>UH-IaaS var allerede klargjort for Dataporten</p>
+  <p>UH-IaaS was already prepared for Dataporten</p>
 % else:
-  <p>UH-IaaS klargjort for Dataporten</p>
+  <p>UH-IaaS prepared for Dataporten</p>
 % endif
 % if local_pw:
   <h3>API-tilgang</h3>
-  <p>Brukernavn er '${local_user_name}' og passord er '${local_pw}'.
+  <p>Username is '${local_user_name}' and password is '${local_pw}'.
   <br/>
-  NB! Husk å skrive dette ned til senere bruk.</p>
+  NB! Remember to write the password down for later use.</p>
 % endif
   <a href="${dashboard_url}" class="btn btn-default uninett-login-btn">
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>
-    Fortsett til UH-IaaS
+    Continue to UH-IaaS
   </a>
-  <p>Du blir muligens sendt innom Dataporten igjen først.</p>
+  <p>You may be sent back to Dataporten again.</p>
 </div>
+
+

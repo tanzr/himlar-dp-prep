@@ -8,7 +8,7 @@
   <br/>
   <p>Remember to secure your instance, and make sure they are in accordance with your local IT policy.</p>
 
-  <p>By clicking on "Login", you are agreeing to our terms of service.</p>
+  <p>By clicking on "Log in", you are agreeing to our terms of service.</p>
   <a href="/login" class="btn btn-default uninett-login-btn">
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>
     Log in

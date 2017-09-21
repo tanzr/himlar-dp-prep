@@ -7,7 +7,7 @@
   <p>UH-IaaS prepared for Dataporten</p>
 % endif
 % if local_pw:
-  <h3>API-tilgang</h3>
+  <h3>API access</h3>
   <p>Username is '${local_user_name}' and password is '${local_pw}'.
   <br/>
   NB! Remember to write the password down for later use.</p>
@@ -18,5 +18,3 @@
   </a>
   <p>You may be sent back to Dataporten again.</p>
 </div>
-
-

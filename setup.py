@@ -17,6 +17,7 @@ requires = [
     'python-keystoneclient',
     'waitress',
     'grampg',
+    'pika'
     ]
 
 setup(name='himlar_dp_prep',

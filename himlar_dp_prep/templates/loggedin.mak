@@ -7,7 +7,7 @@
   <p>UH-IaaS prepared for Dataporten</p>
 % endif
 % if local_pw:
-  <h3>API access</h3>
+  <h3>API-tilgang</h3>
   <p>Username is '${local_user_name}' and password is '${local_pw}'.
   <br/>
   NB! Remember to write the password down for later use.</p>
@@ -16,5 +16,9 @@
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>
     Continue to UH-IaaS
   </a>
+  <br/>
+% if was_provisioned:
+  <a href="/reset" class="btn btn-underline">Reset password?</a>
+% endif
   <p>You may be sent back to Dataporten again.</p>
 </div>

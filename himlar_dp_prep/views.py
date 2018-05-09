@@ -1,3 +1,4 @@
+#import pika
 import logging
 from pyramid.view import view_config
 from pyramid.response import Response
@@ -5,6 +6,8 @@ from authomatic import Authomatic
 from authomatic.adapters import WebObAdapter
 from authomatic.providers import oauth2
 from .dp_provisioner import DpProvisioner
+from grampg import PasswordGenerator
+#from .rmp import MQclient
 
 log = logging.getLogger(__name__)
 
@@ -25,7 +28,6 @@ class ProvisionerClient(object):
     def provision(self, user):
         keystone_url = self.settings.get('keystone_url', '')
         horizon_url = self.settings.get('horizon_url', '')
-        region = self.settings.get('region', '')
         admin_pw = self.settings.get('admin_pw', '')
         admin_user = self.settings.get('admin_user', '')
         project_name = self.settings.get('project_name', '')
@@ -34,17 +36,24 @@ class ProvisionerClient(object):
         member_role_name = self.settings.get('member_role_name', '')
         keystone_cachain =  self.settings.get('keystone_cachain', None)
         with_local_user =  self.settings.get('with_local_user', 'false').lower() == 'true'
+        mq_username = self.settings.get('mq_username', '')
+        mq_password = self.settings.get('mq_password', '')
+        mq_host = self.settings.get('mq_host', '')
+        mq_vhost = self.settings.get('mq_vhost', '')
         config = dict(url=keystone_url,
                       password=admin_pw,
                       username=admin_user,
-                      region=region,
                       project_name=project_name,
                       dp_domain_name=dp_domain_name,
                       user_domain_name=default_domain_name,
                       project_domain_name=default_domain_name,
                       member_role_name=member_role_name,
                       keystone_cachain=keystone_cachain,
-                      with_local_user=with_local_user)
+                      with_local_user=with_local_user,
+                      mq_username=mq_username,
+                      mq_password=mq_password,
+                      mq_host=mq_host,
+                      mq_vhost=mq_vhost)
         prov = DpProvisioner(config)
         was_provisioned = prov.is_provisioned(user.email)
         local_pw = None
@@ -56,6 +65,46 @@ class ProvisionerClient(object):
             prov_result = prov.provision(user.email)
             res.update(prov_result)
         return res
+
+    @view_config(route_name='reset', renderer='templates/reset.mak')
+    def reset_view(self):
+        # TODO: we need to get the user from dataporten
+        #user_email = 'Raymond.Kristiansen@uib.no'
+
+        #keystone_url = self.settings.get('keystone_url', '')
+        #horizon_url = self.settings.get('horizon_url', '')
+        #admin_pw = self.settings.get('admin_pw', '')
+        #admin_user = self.settings.get('admin_user', '')
+        #project_name = self.settings.get('project_name', '')
+        #dp_domain_name = self.settings.get('dp_domain_name', '')
+        #default_domain_name = self.settings.get('default_domain_name', '')
+        #member_role_name = self.settings.get('member_role_name', '')
+        #keystone_cachain =  self.settings.get('keystone_cachain', None)
+        #with_local_user =  self.settings.get('with_local_user', 'false').lower() == 'true'
+        #mq_username = self.settings.get('mq_username', '')
+        #mq_password = self.settings.get('mq_password', '')
+        #mq_host = self.settings.get('mq_host', '')
+        #mq_vhost = self.settings.get('mq_vhost', '')
+        #config = dict(url=keystone_url,
+        #              password=admin_pw,
+        #              username=admin_user,
+        #              project_name=project_name,
+        #              dp_domain_name=dp_domain_name,
+        #              user_domain_name=default_domain_name,
+        #              project_domain_name=default_domain_name,
+        #              member_role_name=member_role_name,
+        #              keystone_cachain=keystone_cachain,
+        #              with_local_user=with_local_user,
+        #              mq_username=mq_username,
+        #              mq_password=mq_password,
+        #              mq_host=mq_host,
+        #              mq_vhost=mq_vhost)
+        #prov = DpProvisioner(config)
+        #horizon_url = self.settings.get('horizon_url', '')
+        #tpl = '{}/dashboard/auth/login/'
+        #local_pw = prov.reset(user_email)
+        #return { 'local_pw': local_pw }
+        return {}
 
     def login_complete(self, result):
         if result.error:

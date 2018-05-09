@@ -1,9 +1,11 @@
 import logging
+#import pika
 import argparse
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
 from keystoneclient.v3 import client
 from grampg import PasswordGenerator
+#from himlar_dp_prep.rmq import MQclient
 
 ADMIN_NAME = 'admin'
 PROJECT_NAME = 'admin'
@@ -17,8 +19,7 @@ def group_name(user_id):
     return '{}-group'.format(user_id)
 
 def proj_name(user_id):
-    pname = user_id.lower().replace('@', '.')
-    return 'DEMO-%s' % pname
+    return user_id.lower()
 
 def local_user_name(user_id):
     return user_id.lower()
@@ -41,13 +42,14 @@ class DpProvisioner(object):
                            project_name=config['project_name'],
                            user_domain_name=config['user_domain_name'],
                            project_domain_name=config['project_domain_name'])
-        sess = session.Session(auth=auth, verify=keystone_cachain)
-        self.ks = client.Client(session=sess, region_name=config['region'])
+        sess = session.Session(auth=auth,verify=keystone_cachain)
+        self.ks = client.Client(session=sess)
         domains = self.ks.domains.list(name=dp_domain_name)
         if len(domains) == 1:
             self.domain = domains[0]
         else:
             raise ValueError("Expecting unique '{}' domain".format(dp_domain_name))
+        #self.rmq = MQclient(config)
 
     def del_resources(self, user_id):
         local_users = self.ks.users.list(name=local_user_name(user_id), domain=self.domain)
@@ -95,24 +97,32 @@ class DpProvisioner(object):
         else:
             group = groups[0]
         if len(projs) < 1:
-            desc = "Personal demo project for %s. Resources might be terminated at any time" % lname
-            proj = self.ks.projects.create(name=pname,
-                                           domain=self.domain,
-                                           type='demo',
-                                           admin=lname,
-                                           description=desc)
+            proj = self.ks.projects.create(name=pname, domain=self.domain)
             log.info("project created: %s", proj.id)
         else:
             proj = projs[0]
         self.grant_membership(proj, group)
         if self.with_local_user:
             self.local_pw = make_password()
-            user = self.ks.users.create(name=lname, domain=self.domain, type='api',
+            user = self.ks.users.create(name=lname, domain=self.domain,
                                         project=proj, email=user_id, password=self.local_pw)
             log.info("local user created: %s", user.id)
             self.ks.users.add_to_group(user, group)
         return dict(local_user_name=lname,
                     local_pw=self.local_pw)
+
+    def reset(self, user_id): #retunert passord til view
+        lname = local_user_name(user_id)
+        if self.with_local_user:
+            local_pw = make_password()
+            log.info("local user created: %s", user_id)
+            data = {
+                'action': 'reset_password',
+                'email': user_id,
+                'password': local_pw
+            }
+            #self.rmq.push(data=data, queue='access') #??
+        return local_pw
 
 if __name__ == '__main__':
     DESCRIPTION = "Dataporten provisioner for Openstack"

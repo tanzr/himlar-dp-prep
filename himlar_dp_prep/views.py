@@ -68,43 +68,42 @@ class ProvisionerClient(object):
 
     @view_config(route_name='reset', renderer='templates/reset.mak')
     def reset_view(self):
-        # TODO: we need to get the user from dataporten
-        #user_email = 'Raymond.Kristiansen@uib.no'
-
-        #keystone_url = self.settings.get('keystone_url', '')
-        #horizon_url = self.settings.get('horizon_url', '')
-        #admin_pw = self.settings.get('admin_pw', '')
-        #admin_user = self.settings.get('admin_user', '')
-        #project_name = self.settings.get('project_name', '')
-        #dp_domain_name = self.settings.get('dp_domain_name', '')
-        #default_domain_name = self.settings.get('default_domain_name', '')
-        #member_role_name = self.settings.get('member_role_name', '')
-        #keystone_cachain =  self.settings.get('keystone_cachain', None)
-        #with_local_user =  self.settings.get('with_local_user', 'false').lower() == 'true'
-        #mq_username = self.settings.get('mq_username', '')
-        #mq_password = self.settings.get('mq_password', '')
-        #mq_host = self.settings.get('mq_host', '')
-        #mq_vhost = self.settings.get('mq_vhost', '')
-        #config = dict(url=keystone_url,
-        #              password=admin_pw,
-        #              username=admin_user,
-        #              project_name=project_name,
-        #              dp_domain_name=dp_domain_name,
-        #              user_domain_name=default_domain_name,
-        #              project_domain_name=default_domain_name,
-        #              member_role_name=member_role_name,
-        #              keystone_cachain=keystone_cachain,
-        #              with_local_user=with_local_user,
-        #              mq_username=mq_username,
-        #              mq_password=mq_password,
-        #              mq_host=mq_host,
-        #              mq_vhost=mq_vhost)
-        #prov = DpProvisioner(config)
-        #horizon_url = self.settings.get('horizon_url', '')
-        #tpl = '{}/dashboard/auth/login/'
-        #local_pw = prov.reset(user_email)
+        keystone_url = self.settings.get('keystone_url', '')
+        horizon_url = self.settings.get('horizon_url', '')
+        admin_pw = self.settings.get('admin_pw', '')
+        admin_user = self.settings.get('admin_user', '')
+        project_name = self.settings.get('project_name', '')
+        dp_domain_name = self.settings.get('dp_domain_name', '')
+        default_domain_name = self.settings.get('default_domain_name', '')
+        member_role_name = self.settings.get('member_role_name', '')
+        keystone_cachain =  self.settings.get('keystone_cachain', None)
+        with_local_user =  self.settings.get('with_local_user', 'false').lower() == 'true'
+        mq_username = self.settings.get('mq_username', '')
+        mq_password = self.settings.get('mq_password', '')
+        mq_host = self.settings.get('mq_host', '')
+        mq_vhost = self.settings.get('mq_vhost', '')
+        config = dict(url=keystone_url,
+                      password=admin_pw,
+                      username=admin_user,
+                      project_name=project_name,
+                      dp_domain_name=dp_domain_name,
+                      user_domain_name=default_domain_name,
+                      project_domain_name=default_domain_name,
+                      member_role_name=member_role_name,
+                      keystone_cachain=keystone_cachain,
+                      with_local_user=with_local_user,
+                      mq_username=mq_username,
+                      mq_password=mq_password,
+                      mq_host=mq_host,
+                      mq_vhost=mq_vhost)
+        prov = DpProvisioner(config)
+        user_email = prov.get_user(self) #get user from DP
+        horizon_url = self.settings.get('horizon_url', '')
+        tpl = '{}/dashboard/auth/login/'
+        local_pw = prov.reset(user_email)
         #return { 'local_pw': local_pw }
-        return {}
+        res = dict(local_user_name=user_email, local_pw=local_pw)
+        return res
 
     def login_complete(self, result):
         if result.error:

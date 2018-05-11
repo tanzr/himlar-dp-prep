@@ -111,8 +111,7 @@ class DpProvisioner(object):
         return dict(local_user_name=lname,
                     local_pw=self.local_pw)
 
-    def reset(self, user_id): #retunert passord til view
-        lname = local_user_name(user_id)
+    def reset(self, user_id):
         if self.with_local_user:
             local_pw = make_password()
             log.info("local user created: %s", user_id)
@@ -120,9 +119,16 @@ class DpProvisioner(object):
                 'action': 'reset_password',
                 'email': user_id,
                 'password': local_pw
-            }
-            #self.rmq.push(data=data, queue='access') #??
+            } 
+#            self.rmq.push(data=data, queue='access')
         return local_pw
+
+    def get_user(self, user_id):
+        users = self.ks.users.list(email=user_id)
+        for u in users:
+            user = self.ks.users.get(u.id)
+
+        return user.name
 
 if __name__ == '__main__':
     DESCRIPTION = "Dataporten provisioner for Openstack"

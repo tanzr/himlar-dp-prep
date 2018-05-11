@@ -1,4 +1,3 @@
-#import pika
 import logging
 from pyramid.view import view_config
 from pyramid.response import Response
@@ -7,7 +6,6 @@ from authomatic.adapters import WebObAdapter
 from authomatic.providers import oauth2
 from .dp_provisioner import DpProvisioner
 from grampg import PasswordGenerator
-#from .rmp import MQclient
 
 log = logging.getLogger(__name__)
 

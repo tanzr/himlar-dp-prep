@@ -11,12 +11,13 @@
   <p>Username: '${local_user_name}' 
   <br/>
   Password: '${local_pw}'</p>
-  <p> NB! Remember to write the password down for later use.</p>
+  <p>NB! Remember to write the password down for later use.</p>
 % endif
   <a href="${dashboard_url}" class="btn btn-default uninett-login-btn">
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>
     Continue to UH-IaaS
   </a>
+  <br/>
 % if was_provisioned:
   <a href="/reset" class="btn btn-underline">Reset password?</a>
 % endif

@@ -113,7 +113,7 @@ class DpProvisioner(object):
     def reset(self, user_id):
         if self.with_local_user:
             local_pw = make_password()
-            log.info("local user created: %s", user_id)
+            log.info("Reset password for: %s", user_id)
             data = {
                 'action': 'reset_password',
                 'email': user_id,

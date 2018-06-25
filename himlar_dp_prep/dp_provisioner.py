@@ -114,7 +114,7 @@ class DpProvisioner(object):
             }
             self.rmq.push(data=data, queue='access')
         return dict(local_user_name=lname,
-                    local_pw=self.local_pw)
+                    local_pw=local_pw)
 
     def reset(self, user_id):
         if self.with_local_user:

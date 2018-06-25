@@ -102,11 +102,17 @@ class DpProvisioner(object):
             proj = projs[0]
         self.grant_membership(proj, group)
         if self.with_local_user:
-            self.local_pw = make_password()
+            local_pw = make_password()
             user = self.ks.users.create(name=lname, domain=self.domain,
                                         project=proj, email=user_id, password=self.local_pw)
             log.info("local user created: %s", user.id)
             self.ks.users.add_to_group(user, group)
+            data = {
+                'action': 'provision',
+                'email': user_id,
+                'password': local_pw
+            }
+            self.rmq.push(data=data, queue='access')
         return dict(local_user_name=lname,
                     local_pw=self.local_pw)
 

@@ -45,33 +45,34 @@ class DpProvisioner(object):
         self.rmq = MQclient(config)
 
     def get_user(self, user_id):
-        users = self.ks.users.list(email=user_id)
+        users = self.ks.users.list(user_id)
         for u in users:
+            #log.info("user list %s", u)
             user = self.ks.users.get(u.id)
         return user.name
 
-    def is_provisioned(self, user_id):
-#        groups = self.ks.groups.list(name=group_name(user_id), domain=self.domain)
-#        if len(groups) > 0:
-#            group = groups[0]
-#            roles = self.ks.role_assignments.list(group=group)
-#            return any(['project' in r.scope for r in roles])
-#        else:
-#            return False
-
+    def is_provisioned(self, user_id, user_type):
+	#  >>> Solution 1
 	if self.get_user(user_id):
-            log.info('User is provisioned via DP.') #TODO check object type - if api True, otherwise False
-	    return True
-	return False
+	    if self.ks.users.list(user_type='api'):
+		try:
+                    user = self.ks.users.list(domain=self.domain, name=user_id)
+                except:
+                    log.info('API user not found!')
+
+	# >>> Solution 2
+#	if self.ks.users.list():
+#	    if user_type == 'api':
+#		try:
+#	            user = self.ks.users.list(domain=self.domain, name=user_id)
+#		except:
+#		    log.info('API user not found!')
 
     def provision(self, user_id):
         lname = local_user_name(user_id)
         if self.with_local_user:
             local_pw = make_password()
-            user = self.ks.users.create(name=lname, domain=self.domain,
-                                        project=proj, email=user_id, password=self.local_pw)
-            log.info("local user created: %s", user.id)
-            self.ks.users.add_to_group(user, group)
+	    log.info('API user password %s', local_pw)
             data = {
                 'action': 'provision',
                 'email': user_id,
@@ -82,16 +83,16 @@ class DpProvisioner(object):
                     local_pw=local_pw)
 
     def reset(self, user_id):
-        if self.get_user(user_id):
-	    if self.with_local_user:
-                local_pw = make_password()
-                log.info("Reset password for: %s", user_id)
-                data = {
-                    'action': 'reset_password',
-                    'email': user_id,
-                    'password': local_pw
-                } 
-                self.rmq.push(data=data, queue='access')
+#        if self.get_user(user_id) == True:
+        if self.with_local_user:
+            local_pw = make_password()
+            log.info("Reset password for: %s", user_id)
+            data = {
+                'action': 'reset_password',
+                'email': user_id,
+                'password': local_pw
+            } 
+            self.rmq.push(data=data, queue='access')
             return local_pw
 
 if __name__ == '__main__':

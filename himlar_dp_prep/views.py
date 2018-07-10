@@ -53,7 +53,7 @@ class ProvisionerClient(object):
                       mq_host=mq_host,
                       mq_vhost=mq_vhost)
         prov = DpProvisioner(config)
-        was_provisioned = prov.is_provisioned(user.email)
+        was_provisioned = prov.is_provisioned(user.email, 'api')
         local_pw = None
         tpl = '{}/dashboard/auth/login/'
         res = dict(user=user,

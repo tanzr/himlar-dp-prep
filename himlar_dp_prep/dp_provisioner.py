@@ -45,28 +45,21 @@ class DpProvisioner(object):
         self.rmq = MQclient(config)
 
     def get_user(self, user_id):
-        users = self.ks.users.list(user_id)
+	try:
+            users = self.ks.users.list(domain=self.domain, name=local_user_name(user_id))
+        except:
+            log.info('API user not found!')
         for u in users:
-            #log.info("user list %s", u)
-            user = self.ks.users.get(u.id)
-        return user.name
+	    user = u
+        return user_id #or user.name
 
     def is_provisioned(self, user_id, user_type):
-	#  >>> Solution 1
-	if self.get_user(user_id):
-	    if self.ks.users.list(user_type='api'):
-		try:
-                    user = self.ks.users.list(domain=self.domain, name=user_id)
-                except:
-                    log.info('API user not found!')
-
-	# >>> Solution 2
-#	if self.ks.users.list():
-#	    if user_type == 'api':
-#		try:
-#	            user = self.ks.users.list(domain=self.domain, name=user_id)
-#		except:
-#		    log.info('API user not found!')
+	user = self.get_user(user_id)
+	if not user:
+            log.info('API user not found!')
+	    return False
+	    if user_type == 'api':
+	        return True
 
     def provision(self, user_id):
         lname = local_user_name(user_id)

@@ -7,11 +7,12 @@
   terms of service</a> before you start using the service.</p>
   <br/>
   <p>Remember to secure your instance, and make sure they are in accordance with your local IT policy.</p>
-
-  <p>By clicking on "Log in", you are agreeing to our terms of service.</p>
+  <p>By clicking on "Sign up", you are agreeing to our terms of service.</p>
   <a href="/login" class="btn btn-default uninett-login-btn">
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>
-    Log in
+    Sign up
   </a>
+  <br/>
+  <a href="/login" class="btn btn-underline">Reset API password?</a>
   <p>Next time you can go directly to the UH-IaaS' dashboard.</p>
 </div>

@@ -19,7 +19,7 @@
   </a>
   <br/>
 % if was_provisioned:
-  <a href="/reset" class="btn btn-underline">Reset password?</a>
+  <a href="/reset" class="btn btn-underline">Reset API password?</a>
 % endif
   <br/>
   <p>You may be sent back to Dataporten again.</p>

@@ -43,7 +43,13 @@ class DpProvisioner(object):
         else:
             raise ValueError("Expecting unique '{}' domain".format(dp_domain_name))
         self.rmq = MQclient(config)
-    
+
+    def get_user(self, user_id): #used for reset
+        users = self.ks.users.list(email=user_id)
+        for u in users:
+            user = self.ks.users.get(u.id)
+        return user.name	
+
     def is_provisioned(self, user_id, user_type):
         if user_type == 'api':
 	    try:
@@ -69,7 +75,6 @@ class DpProvisioner(object):
                     local_pw=local_pw)
 
     def reset(self, user_id):
-#        if self.get_user(user_id) == True:
         if self.with_local_user:
             local_pw = make_password()
             log.info("Reset password for: %s", user_id)

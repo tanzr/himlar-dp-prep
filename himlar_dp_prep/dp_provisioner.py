@@ -43,29 +43,22 @@ class DpProvisioner(object):
         else:
             raise ValueError("Expecting unique '{}' domain".format(dp_domain_name))
         self.rmq = MQclient(config)
-
-    def get_user(self, user_id):
-	try:
-            users = self.ks.users.list(domain=self.domain, name=local_user_name(user_id))
-        except:
-            log.info('API user not found!')
-        for u in users:
-	    user = u
-        return user_id #or user.name
-
+    
     def is_provisioned(self, user_id, user_type):
-	user = self.get_user(user_id)
-	if not user:
-            log.info('API user not found!')
+        if user_type == 'api':
+	    try:
+                user = self.ks.users.list(domain=self.domain_id, name=local_user_name(user_id))
+		return user
+            except:
+                log.info('User not found!')
+	else:
 	    return False
-	    if user_type == 'api':
-	        return True
 
     def provision(self, user_id):
         lname = local_user_name(user_id)
         if self.with_local_user:
             local_pw = make_password()
-	    log.info('API user password %s', local_pw)
+	    log.info('API user and password: %s  %s', lname, local_pw)
             data = {
                 'action': 'provision',
                 'email': user_id,

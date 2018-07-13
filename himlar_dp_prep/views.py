@@ -66,6 +66,14 @@ class ProvisionerClient(object):
 
     @view_config(route_name='reset', renderer='templates/reset.mak')
     def reset_view(self):
+	#TODO reset_complete() reset() 
+        response = Response()
+        dpconf = dict(class_=oauth2.Dataporten,
+                      consumer_key=self.settings.get('oauth_client_id', ''),
+                      consumer_secret=self.settings.get('oauth_client_secret', ''))
+        authomatic = Authomatic(config=dict(dp=dpconf), secret='mumbojumbo')
+        result = authomatic.login(WebObAdapter(self.request, response), 'dp')
+        
         keystone_url = self.settings.get('keystone_url', '')
         horizon_url = self.settings.get('horizon_url', '')
         admin_pw = self.settings.get('admin_pw', '')

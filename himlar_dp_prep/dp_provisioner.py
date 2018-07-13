@@ -2,6 +2,7 @@ import logging
 import argparse
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
+import keystoneauth1.exceptions as exceptions
 from keystoneclient.v3 import client
 from grampg import PasswordGenerator
 from himlar_dp_prep.rmq import MQclient
@@ -38,27 +39,32 @@ class DpProvisioner(object):
         sess = session.Session(auth=auth,verify=keystone_cachain)
         self.ks = client.Client(session=sess)
         domains = self.ks.domains.list(name=dp_domain_name)
+	log.info("Domains: %s", domains)
         if len(domains) == 1:
             self.domain = domains[0]
         else:
             raise ValueError("Expecting unique '{}' domain".format(dp_domain_name))
         self.rmq = MQclient(config)
 
-    def get_user(self, user_id): #used for reset
-        users = self.ks.users.list(email=user_id)
-        for u in users:
-            user = self.ks.users.get(u.id)
-        return user.name	
+    def get_user(self, user_id):
+	local_users = self.ks.users.list(domain=self.domain, name=local_user_name(user_id))
+	try:
+	    if local_users:
+		for u in local_users:
+	    	    self.ks.users.get(u.id)
+                    log.info('User found! %s', u)
+                    return u
+        except exceptions.http.NotFound:
+	    log.info('User not found! %s', local_users)
 
-    def is_provisioned(self, user_id, user_type):
-        if user_type == 'api':
-	    try:
-                user = self.ks.users.list(domain=self.domain_id, name=local_user_name(user_id))
-		return user
-            except:
-                log.info('User not found!')
-	else:
-	    return False
+    def is_provisioned(self, user_id, user_type): #Not working!
+	user = self.get_user(user_id)
+	user_type =  user.type == 'api' 
+	if user and user_type:
+	    log.info('is_provisioned')
+	    #return True
+	#else:
+	#    return False
 
     def provision(self, user_id):
         lname = local_user_name(user_id)

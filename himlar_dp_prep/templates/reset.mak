@@ -2,7 +2,7 @@
 <div class="row uninett-color-white uninett-whole-row uninett-padded">
   <h2>UH-IaaS via Dataporten</h2>
   <br/>
-% if provisioned:
+% if was_provisioned:
   <h3>Reset API password</h3>
   <p>Username: '${local_user_name}'
   <br/>

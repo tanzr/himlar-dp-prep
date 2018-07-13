@@ -100,7 +100,7 @@ class ProvisionerClient(object):
         local_pw = prov.reset(user.email) 
         res = dict(local_user_name=user.email, local_pw=local_pw, was_provisioned=was_provisioned)
 	if not was_provisioned:
-	    log.info("Do nothing")
+	    log.info("Do nothing!")
         return res
 
     @view_config(route_name='reset', renderer='templates/reset.mak')

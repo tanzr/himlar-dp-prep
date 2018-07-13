@@ -33,4 +33,4 @@ class MQclient(object):
                                        properties=pika.BasicProperties(
                                        delivery_mode=2))
         if result:
-            print "(message %s added to queue %s', message, queue)"
+            print ('message %s added to queue %s', message, queue)

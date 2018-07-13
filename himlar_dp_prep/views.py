@@ -98,7 +98,7 @@ class ProvisionerClient(object):
 	if was_provisioned: #if false, don't reset
             horizon_url = self.settings.get('horizon_url', '')
             tpl = '{}/dashboard/auth/login/'
-            local_pw = prov.reset(result.user.email) 
+            local_pw = prov.reset(user.email) 
             res = dict(local_user_name=user.email, local_pw=local_pw)
             return res
         else:
@@ -115,10 +115,10 @@ class ProvisionerClient(object):
         result = authomatic.login(WebObAdapter(self.request, response), 'dp')
         if result:
             # The login procedure is over
-            log.debug('login_view - login complete')
-            return self.login_complete(result)
+            log.debug('reset_view - login complete')
+            return self.reset_complete(result)
         else:
-            log.debug('login_view - login not complete')
+            log.debug('reset_view - login not complete')
             return response
 	
     def reset_complete(self, result):

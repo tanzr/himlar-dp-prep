@@ -53,7 +53,7 @@ class ProvisionerClient(object):
                       mq_host=mq_host,
                       mq_vhost=mq_vhost)
         prov = DpProvisioner(config)
-        was_provisioned = prov.is_provisioned(user.email, 'api')
+        was_provisioned = prov.is_provisioned(user.email)
         local_pw = None
         tpl = '{}/dashboard/auth/login/'
         res = dict(user=user,
@@ -64,16 +64,7 @@ class ProvisionerClient(object):
             res.update(prov_result)
         return res
 
-    @view_config(route_name='reset', renderer='templates/reset.mak')
-    def reset_view(self):
-	#TODO reset_complete() reset() 
-        response = Response()
-        dpconf = dict(class_=oauth2.Dataporten,
-                      consumer_key=self.settings.get('oauth_client_id', ''),
-                      consumer_secret=self.settings.get('oauth_client_secret', ''))
-        authomatic = Authomatic(config=dict(dp=dpconf), secret='mumbojumbo')
-        result = authomatic.login(WebObAdapter(self.request, response), 'dp')
-        
+    def reset(self, user):
         keystone_url = self.settings.get('keystone_url', '')
         horizon_url = self.settings.get('horizon_url', '')
         admin_pw = self.settings.get('admin_pw', '')
@@ -103,12 +94,45 @@ class ProvisionerClient(object):
                       mq_host=mq_host,
                       mq_vhost=mq_vhost)
         prov = DpProvisioner(config)
-        user_email = prov.get_user(self) #get user from DP
-        horizon_url = self.settings.get('horizon_url', '')
-        tpl = '{}/dashboard/auth/login/'
-        local_pw = prov.reset(user_email)
-        res = dict(local_user_name=user_email, local_pw=local_pw)
-        return res
+        was_provisioned = prov.is_provisioned(user.email)
+	if was_provisioned: #if false, don't reset
+            horizon_url = self.settings.get('horizon_url', '')
+            tpl = '{}/dashboard/auth/login/'
+            local_pw = prov.reset(result.user.email) 
+            res = dict(local_user_name=user.email, local_pw=local_pw)
+            return res
+        else:
+	    log.info('Not provisioned!')
+
+    @view_config(route_name='reset', renderer='templates/reset.mak')
+    def reset_view(self):
+        log.debug('reset_view')
+        response = Response()
+        dpconf = dict(class_=oauth2.Dataporten,
+                      consumer_key=self.settings.get('oauth_client_id', ''),
+                      consumer_secret=self.settings.get('oauth_client_secret', ''))
+        authomatic = Authomatic(config=dict(dp=dpconf), secret='mumbojumbo')
+        result = authomatic.login(WebObAdapter(self.request, response), 'dp')
+        if result:
+            # The login procedure is over
+            log.debug('login_view - login complete')
+            return self.login_complete(result)
+        else:
+            log.debug('login_view - login not complete')
+            return response
+	
+    def reset_complete(self, result):
+        if result.error:
+            raise LoginFailedException(result.error.message)
+        elif not result.user:
+            raise NoUserException()
+        elif not (result.user.name and result.user.email):
+            # OAuth 2.0 provides only limited user data on login,
+            # We need to update the user to get more info.
+            result.user.update()
+        if not (result.user.email and len(result.user.email) > 0):
+            raise NoEmailException()
+        return self.reset(result.user)
 
     def login_complete(self, result):
         if result.error:

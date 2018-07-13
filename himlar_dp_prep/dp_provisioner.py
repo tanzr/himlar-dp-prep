@@ -39,7 +39,6 @@ class DpProvisioner(object):
         sess = session.Session(auth=auth,verify=keystone_cachain)
         self.ks = client.Client(session=sess)
         domains = self.ks.domains.list(name=dp_domain_name)
-	log.info("Domains: %s", domains)
         if len(domains) == 1:
             self.domain = domains[0]
         else:
@@ -50,21 +49,24 @@ class DpProvisioner(object):
 	local_users = self.ks.users.list(domain=self.domain, name=local_user_name(user_id))
 	try:
 	    if local_users:
-		for u in local_users:
-	    	    self.ks.users.get(u.id)
-                    log.info('User found! %s', u)
-                    return u
+		for user in local_users:
+	    	    self.ks.users.get(user.id)
+                    return user
         except exceptions.http.NotFound:
-	    log.info('User not found! %s', local_users)
+	    log.info('User %s not found!', local_users)
 
-    def is_provisioned(self, user_id, user_type): #Not working!
-	user = self.get_user(user_id)
-	user_type =  user.type == 'api' 
-	if user and user_type:
-	    log.info('is_provisioned')
-	    #return True
-	#else:
-	#    return False
+    def is_provisioned(self, user_id, user_type='api'):
+        user = self.get_user(user_id)
+        if user:
+          if hasattr(user, 'type') and user.type == user_type:
+            log.info('User %s is already provisioned!', user.name)
+            return True
+          # User found but type missing: we guess this is still ok
+          log.info('User %s found, but missing type = api!', user.name)
+          return True
+        #else:
+        #  log.info('Uuser %s is not provisioned!', user.name)
+        #  return False
 
     def provision(self, user_id):
         lname = local_user_name(user_id)
@@ -81,6 +83,7 @@ class DpProvisioner(object):
                     local_pw=local_pw)
 
     def reset(self, user_id):
+        lname = local_user_name(user_id)
         if self.with_local_user:
             local_pw = make_password()
             log.info("Reset password for: %s", user_id)
@@ -90,7 +93,9 @@ class DpProvisioner(object):
                 'password': local_pw
             } 
             self.rmq.push(data=data, queue='access')
-            return local_pw
+            #return local_pw
+            return dict(local_user_name=lname,
+                        local_pw=local_pw)
 
 if __name__ == '__main__':
     DESCRIPTION = "Dataporten provisioner for Openstack"

@@ -13,6 +13,6 @@
     Sign up
   </a>
   <br/>
-  <a href="/login" class="btn btn-underline">Reset API password?</a>
+  <a href="/reset" class="btn btn-underline">Reset API password?</a>
   <p>Next time you can go directly to the UH-IaaS' dashboard.</p>
 </div>

@@ -94,13 +94,11 @@ class ProvisionerClient(object):
                       mq_host=mq_host,
                       mq_vhost=mq_vhost)
         prov = DpProvisioner(config)
-        was_provisioned = prov.is_provisioned(user.email)
+        was_provisioned = prov.is_provisioned(user.email) 
         horizon_url = self.settings.get('horizon_url', '')
         tpl = '{}/dashboard/auth/login/'
         local_pw = prov.reset(user.email) 
         res = dict(local_user_name=user.email, local_pw=local_pw, was_provisioned=was_provisioned)
-	if not was_provisioned:
-	    log.info("Do nothing!")
         return res
 
     @view_config(route_name='reset', renderer='templates/reset.mak')

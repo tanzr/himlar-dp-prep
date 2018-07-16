@@ -93,9 +93,8 @@ class DpProvisioner(object):
                 'password': local_pw
             } 
             self.rmq.push(data=data, queue='access')
-            #return local_pw
-            return dict(local_user_name=lname,
-                        local_pw=local_pw)
+            return local_pw
+            #return dict(local_user_name=lname, local_pw=local_pw)
 
 if __name__ == '__main__':
     DESCRIPTION = "Dataporten provisioner for Openstack"

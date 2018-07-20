@@ -4,9 +4,9 @@
   <br/>
 % if was_provisioned:
   <h3>Reset API password</h3>
-  <p>Username: '${local_user_name}'
+  <divp>Username: '${local_user_name}'
   <br/>
-  Password: '${local_pw}'</p> 
+  Password: '${local_pw}'</div>
   <p>NB! Remember to write the password down for later use.</p>
   <a href="https://dashboard.vagrant.iaas.intern/dashboard/auth/login/" class="btn btn-default uninett-login-btn">
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>

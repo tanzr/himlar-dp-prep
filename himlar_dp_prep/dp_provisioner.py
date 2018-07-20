@@ -52,21 +52,21 @@ class DpProvisioner(object):
 		for user in local_users:
 	    	    self.ks.users.get(user.id)
                     return user
-        except exceptions.http.NotFound:
+        except: #exceptions.http.NotFound:
 	    log.info('User %s not found!', local_users)
 
     def is_provisioned(self, user_id, user_type='api'):
         user = self.get_user(user_id)
-        if user:
-          if hasattr(user, 'type') and user.type == user_type:
-            log.info('User %s is already provisioned!', user.name)
-            return True
-          # User found but type missing: we guess this is still ok
-          log.info('User %s found, but missing type = api!', user.name)
-          return True
-        #else:
-        #  log.info('Uuser %s is not provisioned!', user.name)
-        #  return False
+	try:
+            if user:
+              if hasattr(user, 'type') and user.type == user_type:
+                log.info('User %s is already provisioned!', user.name)
+                return True
+              # User found but type missing: we guess this is still ok
+              log.info('User %s found, but missing type = api!', user.name)
+              return True
+	except:
+	    log.info('User %s not found!', user)
 
     def provision(self, user_id):
         lname = local_user_name(user_id)
@@ -91,10 +91,13 @@ class DpProvisioner(object):
                 'action': 'reset_password',
                 'email': user_id,
                 'password': local_pw
-            } 
-            self.rmq.push(data=data, queue='access')
-            return local_pw
-            #return dict(local_user_name=lname, local_pw=local_pw)
+            }
+	try:
+	    if self.is_provisioned(user_id): 
+	    	self.rmq.push(data=data, queue='access')
+		return local_pw
+	except:
+	    log.info('User %s is not provisioned!', user_id)
 
 if __name__ == '__main__':
     DESCRIPTION = "Dataporten provisioner for Openstack"

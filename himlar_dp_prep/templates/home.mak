@@ -25,5 +25,5 @@
   <br/>
   <a href="/reset" class="btn btn-underline">Reset API password</a>
   <br/>
-  <>vNext time you can go directly to the UH-IaaS' <a href="https://www.dashboard.uh-iaas.no">dashboard</a>.</p>
+  Next time you can go directly to the UH-IaaS' <a href="https://www.dashboard.uh-iaas.no">dashboard</a>.</p>
 </div>

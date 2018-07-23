@@ -14,6 +14,8 @@ class MQclient(object):
             virtual_host=self.config['mq_vhost'],
             credentials=credentials)
         self.connection = pika.BlockingConnection(parameters)
+        if not self.connection:
+            raise ValueError('HTTP error occurred.')
 
     def get_channel(self, queue):
         channel = self.connection.channel()

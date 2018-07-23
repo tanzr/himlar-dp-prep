@@ -6,6 +6,7 @@ import keystoneauth1.exceptions as exceptions
 from keystoneclient.v3 import client
 from grampg import PasswordGenerator
 from himlar_dp_prep.rmq import MQclient
+import pyramid.httpexceptions as exc
 
 ADMIN_NAME = 'admin'
 PROJECT_NAME = 'admin'
@@ -78,9 +79,11 @@ class DpProvisioner(object):
                 'email': user_id,
                 'password': local_pw
             }
-            self.rmq.push(data=data, queue='access')
-        return dict(local_user_name=lname,
-                    local_pw=local_pw)
+	    try:
+		self.rmq.push(data=data, queue='access')
+		return dict(local_user_name=lname, local_pw=local_pw)
+	    except:
+	        raise exc.HTTPInternalServerError("HTTP error occurred")
 
     def reset(self, user_id):
         lname = local_user_name(user_id)
@@ -97,7 +100,7 @@ class DpProvisioner(object):
 	    	self.rmq.push(data=data, queue='access')
 		return local_pw
 	except:
-	    log.info('User %s is not provisioned!', user_id)
+            raise exc.HTTPInternalServerError("HTTP error occurred")
 
 if __name__ == '__main__':
     DESCRIPTION = "Dataporten provisioner for Openstack"

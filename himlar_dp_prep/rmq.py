@@ -1,5 +1,6 @@
 import pika
 import json
+import pyramid.httpexceptions as exc
 
 class MQclient(object):
 
@@ -12,10 +13,13 @@ class MQclient(object):
         parameters = pika.ConnectionParameters(
             host=self.config['mq_host'],
             virtual_host=self.config['mq_vhost'],
-            credentials=credentials)
+            credentials=credentials,
+	    socket_timeout=10
+	    blocked_connection_timeout=120)
         self.connection = pika.BlockingConnection(parameters)
         if not self.connection:
-            raise ValueError('HTTP error occurred.')
+            #raise ValueError('HTTP error occurred.')
+	    raise exception_response(500)
 
     def get_channel(self, queue):
         channel = self.connection.channel()
@@ -36,3 +40,5 @@ class MQclient(object):
                                        delivery_mode=2))
         if result:
             print ('Message: %s', message, ' added to queue: ', queue)
+
+	self.close.connection()

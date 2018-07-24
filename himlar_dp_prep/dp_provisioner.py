@@ -83,7 +83,7 @@ class DpProvisioner(object):
 		self.rmq.push(data=data, queue='access')
 		return dict(local_user_name=lname, local_pw=local_pw)
 	    except:
-	        raise exc.HTTPInternalServerError("HTTP error occurred")
+	        raise exc.HTTPInternalServerError("HTTP error occurred during provision process.")
 
     def reset(self, user_id):
         lname = local_user_name(user_id)
@@ -100,7 +100,7 @@ class DpProvisioner(object):
 	    	self.rmq.push(data=data, queue='access')
 		return local_pw
 	except:
-            raise exc.HTTPInternalServerError("HTTP error occurred")
+            raise exc.HTTPInternalServerError("HTTP error occurred during reset process.")
 
 if __name__ == '__main__':
     DESCRIPTION = "Dataporten provisioner for Openstack"

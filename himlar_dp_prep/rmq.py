@@ -14,7 +14,7 @@ class MQclient(object):
             host=self.config['mq_host'],
             virtual_host=self.config['mq_vhost'],
             credentials=credentials,
-	    socket_timeout=10
+	    socket_timeout=10,
 	    blocked_connection_timeout=120)
         self.connection = pika.BlockingConnection(parameters)
         if not self.connection:
@@ -41,4 +41,4 @@ class MQclient(object):
         if result:
             print ('Message: %s', message, ' added to queue: ', queue)
 
-	self.close.connection()
+	self.close_connection()

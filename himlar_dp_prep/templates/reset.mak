@@ -19,4 +19,6 @@
     Sign up
   </a>
 % endif
+  <br/>
+  <p>You may be sent back to Dataporten again.</p>
 </div>

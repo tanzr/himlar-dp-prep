@@ -26,6 +26,7 @@ def make_password():
 
 class DpProvisioner(object):
     def __init__(self, config):
+	self.config = config
         self.member_role_name = config['member_role_name']
         self.with_local_user = config.get('with_local_user')
         self.local_pw = None
@@ -44,7 +45,7 @@ class DpProvisioner(object):
             self.domain = domains[0]
         else:
             raise ValueError("Expecting unique '{}' domain".format(dp_domain_name))
-        self.rmq = MQclient(config)
+#        self.rmq = MQclient(config)
 
     def get_user(self, user_id):
 	local_users = self.ks.users.list(domain=self.domain, name=local_user_name(user_id))
@@ -80,6 +81,7 @@ class DpProvisioner(object):
                 'password': local_pw
             }
 	    try:
+	        self.rmq = MQclient(self.config)
 		self.rmq.push(data=data, queue='access')
 		return dict(local_user_name=lname, local_pw=local_pw)
 	    except:
@@ -96,6 +98,7 @@ class DpProvisioner(object):
                 'password': local_pw
             }
 	try:
+	    self.rmq = MQclient(self.config)
 	    if self.is_provisioned(user_id): 
 	    	self.rmq.push(data=data, queue='access')
 		return local_pw

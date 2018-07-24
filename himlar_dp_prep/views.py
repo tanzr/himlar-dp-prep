@@ -54,7 +54,7 @@ class ProvisionerClient(object):
                       mq_vhost=mq_vhost)
         prov = DpProvisioner(config)
         was_provisioned = prov.is_provisioned(user.email)
-        local_pw = None
+        api_pw = None
         tpl = '{}/dashboard/auth/login/'
         res = dict(user=user,
                     dashboard_url=tpl.format(horizon_url),
@@ -97,8 +97,8 @@ class ProvisionerClient(object):
         was_provisioned = prov.is_provisioned(user.email) 
         horizon_url = self.settings.get('horizon_url', '')
         tpl = '{}/dashboard/auth/login/'
-        local_pw = prov.reset(user.email) 
-        res = dict(local_user_name=user.email, local_pw=local_pw, was_provisioned=was_provisioned)
+        api_pw = prov.reset(user.email) 
+        res = dict(api_user_name=user.email, api_pw=api_pw, was_provisioned=was_provisioned)
         return res
 
     @view_config(route_name='reset', renderer='templates/reset.mak')

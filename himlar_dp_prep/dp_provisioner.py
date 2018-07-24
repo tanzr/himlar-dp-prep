@@ -16,7 +16,7 @@ MEMBER_ROLE_NAME = '_member_'
 
 log = logging.getLogger(__name__)
 
-def local_user_name(user_id):
+def api_user_name(user_id):
     return user_id.lower()
 
 def make_password():
@@ -29,7 +29,7 @@ class DpProvisioner(object):
 	self.config = config
         self.member_role_name = config['member_role_name']
         self.with_local_user = config.get('with_local_user')
-        self.local_pw = None
+        self.api_pw = None
         dp_domain_name = config['dp_domain_name']
         keystone_cachain = config.get('keystone_cachain')
         auth = v3.Password(auth_url=config['url'],
@@ -48,14 +48,14 @@ class DpProvisioner(object):
 #        self.rmq = MQclient(config)
 
     def get_user(self, user_id):
-	local_users = self.ks.users.list(domain=self.domain, name=local_user_name(user_id))
+	api_users = self.ks.users.list(domain=self.domain, name=api_user_name(user_id))
 	try:
-	    if local_users:
-		for user in local_users:
+	    if api_users:
+		for user in api_users:
 	    	    self.ks.users.get(user.id)
                     return user
         except: #exceptions.http.NotFound:
-	    log.info('User %s not found!', local_users)
+	    log.info('User %s not found!', api_users)
 
     def is_provisioned(self, user_id, user_type='api'):
         user = self.get_user(user_id)
@@ -71,37 +71,37 @@ class DpProvisioner(object):
 	    log.info('User %s not found!', user)
 
     def provision(self, user_id):
-        lname = local_user_name(user_id)
+        api_name = api_user_name(user_id)
         if self.with_local_user:
-            local_pw = make_password()
-	    log.info('API user and password: %s  %s', lname, local_pw)
+            api_pw = make_password()
+	    log.info('API user and password: %s  %s', api_name, api_pw)
             data = {
                 'action': 'provision',
                 'email': user_id,
-                'password': local_pw
+                'password': api_pw
             }
 	    try:
 	        self.rmq = MQclient(self.config)
 		self.rmq.push(data=data, queue='access')
-		return dict(local_user_name=lname, local_pw=local_pw)
+		return dict(api_user_name=api_name, api_pw=api_pw)
 	    except:
 	        raise exc.HTTPInternalServerError("HTTP error occurred during provision process.")
 
     def reset(self, user_id):
-        lname = local_user_name(user_id)
+        api_name = api_user_name(user_id)
         if self.with_local_user:
-            local_pw = make_password()
+            api_pw = make_password()
             log.info("Reset password for: %s", user_id)
             data = {
                 'action': 'reset_password',
                 'email': user_id,
-                'password': local_pw
+                'password': api_pw
             }
 	try:
 	    self.rmq = MQclient(self.config)
 	    if self.is_provisioned(user_id): 
 	    	self.rmq.push(data=data, queue='access')
-		return local_pw
+		return api_pw
 	except:
             raise exc.HTTPInternalServerError("HTTP error occurred during reset process.")
 

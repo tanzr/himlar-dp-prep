@@ -15,11 +15,12 @@ class MQclient(object):
             virtual_host=self.config['mq_vhost'],
             credentials=credentials,
 	    socket_timeout=10,
-	    blocked_connection_timeout=120)
-        self.connection = pika.BlockingConnection(parameters)
-        if not self.connection:
+	    blocked_connection_timeout=20)
+	try:
+            self.connection = pika.BlockingConnection(parameters)
+        except:
             #raise ValueError('HTTP error occurred.')
-	    raise exception_response(500)
+	    raise exc.HTTPInternalServerError("HTTP error occurred.")
 
     def get_channel(self, queue):
         channel = self.connection.channel()
@@ -40,5 +41,4 @@ class MQclient(object):
                                        delivery_mode=2))
         if result:
             print ('Message: %s', message, ' added to queue: ', queue)
-
 	self.close_connection()

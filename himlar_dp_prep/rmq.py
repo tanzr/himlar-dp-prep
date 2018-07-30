@@ -6,17 +6,18 @@ class MQclient(object):
 
     def __init__(self, config):
         self.config = config
-        credentials = pika.PlainCredentials(
-            username=self.config['mq_username'],
-            password=self.config['mq_password'])
-
-        parameters = pika.ConnectionParameters(
-            host=self.config['mq_host'],
-            virtual_host=self.config['mq_vhost'],
-            credentials=credentials,
-	    socket_timeout=10,
-	    blocked_connection_timeout=20)
 	try:
+            credentials = pika.PlainCredentials(
+                username=self.config['mq_username'],
+                password=self.config['mq_password'])
+            parameters = pika.ConnectionParameters(
+                host=self.config['mq_host'],
+                virtual_host=self.config['mq_vhost'],
+                credentials=credentials,
+                connection_attempts=5,
+                retry_delay=3,
+                socket_timeout=10,
+                blocked_connection_timeout=30)
             self.connection = pika.BlockingConnection(parameters)
         except:
             #raise ValueError('HTTP error occurred.')

@@ -30,6 +30,7 @@ class ProvisionerClient(object):
 	result = sock.connect_ex((ip, port))
 	if result != 0:
 	    print "Port to MQ is closed."
+	    raise LoginFailedException("Be Right Back! Our service is temporarily unavailable. Please try again later!")
             pass
 
     def provision(self, user):

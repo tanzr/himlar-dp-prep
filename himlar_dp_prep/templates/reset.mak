@@ -17,7 +17,7 @@
   <a href="/login" class="btn btn-default uninett-login-btn">
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>
     Sign up
-  </a>
+  </a><br>
 % endif
   <br/>
   <p>You may be sent back to Dataporten again.</p>

@@ -23,11 +23,11 @@ class ProvisionerClient(object):
     def __init__(self, request):
 	self.request = request
 	self.settings = request.registry.settings
-	ip = '172.31.0.31' #'mq.vagrant.iaas.intern'
+	host = self.settings.get('mq_host') 
 	port = 5672
-
+	addr = socket.gethostbyname(host)
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	result = sock.connect_ex((ip, port))
+	result = sock.connect_ex((addr, port))
 	if result != 0:
 	    print "Port to MQ is closed."
 	    raise LoginFailedException("Be Right Back! Our services are temporarily unavailable. Please try again later!")

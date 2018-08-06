@@ -6,6 +6,7 @@ from authomatic.adapters import WebObAdapter
 from authomatic.providers import oauth2
 from .dp_provisioner import DpProvisioner
 from grampg import PasswordGenerator
+import socket
 
 log = logging.getLogger(__name__)
 
@@ -20,8 +21,16 @@ class NoEmailException(Exception):
 
 class ProvisionerClient(object):
     def __init__(self, request):
-        self.request = request
-        self.settings = request.registry.settings
+	self.request = request
+	self.settings = request.registry.settings
+	ip = '172.31.0.31' #'mq.vagrant.iaas.intern'
+	port = 5672
+
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	result = sock.connect_ex((ip, port))
+	if result != 0:
+	    print "Port to MQ is closed."
+            pass
 
     def provision(self, user):
         keystone_url = self.settings.get('keystone_url', '')

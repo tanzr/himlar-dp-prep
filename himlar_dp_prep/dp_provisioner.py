@@ -99,9 +99,9 @@ class DpProvisioner(object):
             }
 	try:
 	    self.rmq = MQclient(self.config)
-	    if self.is_provisioned(user_id): 
-	    	self.rmq.push(data=data, queue='access')
-		return api_pw
+            if self.is_provisioned(user_id):
+                self.rmq.push(data=data, queue='access')
+                return api_pw
 	except:
             raise exc.HTTPInternalServerError("HTTP error occurred during reset process.")
 

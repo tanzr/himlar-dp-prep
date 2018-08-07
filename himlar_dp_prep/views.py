@@ -10,6 +10,9 @@ import socket
 
 log = logging.getLogger(__name__)
 
+class BeRightBackException(Exception):
+    pass
+
 class LoginFailedException(Exception):
     pass
 
@@ -23,6 +26,7 @@ class ProvisionerClient(object):
     def __init__(self, request):
 	self.request = request
 	self.settings = request.registry.settings
+
 	host = self.settings.get('mq_host') 
 	port = 5672
 	addr = socket.gethostbyname(host)
@@ -30,7 +34,7 @@ class ProvisionerClient(object):
 	result = sock.connect_ex((addr, port))
 	if result != 0:
 	    print "Port to MQ is closed."
-	    raise LoginFailedException("Be Right Back! Our services are temporarily unavailable. Please try again later!")
+	    raise BeRightBackException("Our services are temporarily unavailable. Please try again later!")
             pass
 
     def provision(self, user):
@@ -175,6 +179,10 @@ class ProvisionerClient(object):
 def home_view(request):
     log.debug('home_view')
     return {}
+
+@view_config(context=BeRightBackException, renderer="templates/berightback.mak")
+def be_right_back_view(exc, request):
+    return {'message': str(exc)}
 
 @view_config(context=LoginFailedException, renderer="templates/loginfailed.mak")
 def login_failed_view(exc, request):

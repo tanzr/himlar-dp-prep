@@ -27,6 +27,7 @@ class ProvisionerClient(object):
 	self.request = request
 	self.settings = request.registry.settings
 
+    def checkConnection(self):
 	host = self.settings.get('mq_host') 
 	port = 5672
 	addr = socket.gethostbyname(host)
@@ -35,7 +36,8 @@ class ProvisionerClient(object):
 	if result != 0:
 	    print "Port to MQ is closed."
 	    raise BeRightBackException("Our services are temporarily unavailable. Please try again later!")
-            pass
+            return false
+	return true
 
     def provision(self, user):
         keystone_url = self.settings.get('keystone_url', '')
@@ -108,7 +110,7 @@ class ProvisionerClient(object):
                       mq_host=mq_host,
                       mq_vhost=mq_vhost)
         prov = DpProvisioner(config)
-        was_provisioned = prov.is_provisioned(user.email) 
+        was_provisioned = prov.is_provisioned(user.email)
         horizon_url = self.settings.get('horizon_url', '')
         tpl = '{}/dashboard/auth/login/'
         api_pw = prov.reset(user.email) 
@@ -143,7 +145,8 @@ class ProvisionerClient(object):
             result.user.update()
         if not (result.user.email and len(result.user.email) > 0):
             raise NoEmailException()
-        return self.reset(result.user)
+	if self.checkConnection():
+            return self.reset(result.user)
 
     def login_complete(self, result):
         if result.error:
@@ -156,7 +159,8 @@ class ProvisionerClient(object):
             result.user.update()
         if not (result.user.email and len(result.user.email) > 0):
             raise NoEmailException()
-        return self.provision(result.user)
+	if self.checkConnection():
+            return self.provision(result.user)
 
     @view_config(route_name='login', renderer='templates/loggedin.mak')
     def login_view(self):

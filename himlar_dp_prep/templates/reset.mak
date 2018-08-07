@@ -13,7 +13,10 @@
     Continue to UH-IaaS
   </a>
 %else:
-  <p>You have not signed up to UH-IaaS yet!</p>
+  <p>You have not signed up to UH-IaaS yet.</p>
+  <p>Before signing up to UH-IaaS, make sure that you have read and understood our
+  <a href="http://docs.uh-iaas.no/en/latest/terms-of-service.html" target="blank">
+  Terms of Service</a>.</p><br/>
   <a href="/login" class="btn btn-default uninett-login-btn">
     <span class="glyphicon glyphicon-user uninett-fontColor-red"></span>
     Sign up

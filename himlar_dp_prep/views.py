@@ -36,8 +36,8 @@ class ProvisionerClient(object):
 	if result != 0:
 	    print "Port to MQ is closed."
 	    raise BeRightBackException("Our services are temporarily unavailable. Please try again later!")
-            return false
-	return true
+            return False
+	return True
 
     def provision(self, user):
         keystone_url = self.settings.get('keystone_url', '')

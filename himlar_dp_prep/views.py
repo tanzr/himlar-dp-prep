@@ -26,6 +26,8 @@ class ProvisionerClient(object):
     def __init__(self, request):
 	self.request = request
 	self.settings = request.registry.settings
+	if self.checkConnection():
+	    pass
 
     def checkConnection(self):
 	host = self.settings.get('mq_host') 
